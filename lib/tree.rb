@@ -3,6 +3,8 @@
 require_relative 'node'
 
 class Tree
+  attr_reader :root
+
   def initialize(array)
     @sorted_array = array.sort.uniq
     @root = build_tree(@sorted_array)
@@ -16,7 +18,17 @@ class Tree
     root = Node.new(array[mid])
     root.left = build_tree(array[...mid])
     root.right = build_tree(array[mid + 1...])
+    root
+  end
 
+  def insert(value, root = @root)
+    return Node.new(value) if root.nil?
+
+    if value < root.data
+      root.left = insert(value, root.left)
+    else
+      root.right = insert(value, root.right)
+    end
     root
   end
 
@@ -28,4 +40,6 @@ class Tree
 end
 
 tree = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
+tree.insert(2)
 puts tree.pretty_print
+

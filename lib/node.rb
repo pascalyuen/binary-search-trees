@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Class for creating a node
 class Node
   attr_accessor :data, :left, :right
 
