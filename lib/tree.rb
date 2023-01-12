@@ -32,6 +32,36 @@ class Tree
     root
   end
 
+  def delete(value, root = @root)
+    # Base case: the value cannot be found
+    return nil if root.nil?
+
+    # Search for the root
+    if value < root.data
+      root.left = delete(value, root.left)
+    elsif value > root.data
+      root.right = delete(value, root.right)
+    else
+      # The root is found (value == root.data)
+      # The root has zero or one child
+      return root.right if root.left.nil?
+      return root.left if root.right.nil?
+      # The root has two children
+      root.data = findMin(root.right)
+      root.right = delete(root.data, root.right)
+    end
+    root
+  end
+
+  def findMin(root = @root)
+    min = root.data
+    while(!root.left.nil?)
+      min = root.left.data
+      root = root.left
+    end
+    min
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
@@ -42,4 +72,5 @@ end
 tree = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
 tree.insert(2)
 puts tree.pretty_print
-
+tree.delete(2)
+puts tree.pretty_print
