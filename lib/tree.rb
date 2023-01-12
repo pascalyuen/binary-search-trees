@@ -73,6 +73,24 @@ class Tree
     end
   end
 
+  def level_order
+    queue = [@root]
+    output = []
+    return if @root.nil?
+
+    until queue.empty?
+      current_node = queue.shift
+      if block_given?
+        yield current_node
+      else
+        output << current_node.data
+      end
+      queue << current_node.left unless current_node.left.nil?
+      queue << current_node.right unless current_node.right.nil?
+    end
+  output unless block_given?
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
@@ -85,3 +103,5 @@ tree.insert(2)
 tree.delete(2)
 puts tree.pretty_print
 puts "The node with value 1 is #{tree.find(1)}"
+# tree.level_order {|e| puts e}
+p tree.level_order
