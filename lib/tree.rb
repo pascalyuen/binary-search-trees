@@ -62,6 +62,17 @@ class Tree
     min
   end
 
+  # Write a #find method which accepts a value and returns the node with the given value
+  def find(value, root = @root)
+    return root if root.nil? || root.data == value
+
+    if value < root.data
+      find(value, root.left)
+    elsif value > root.data
+      find(value, root.right)
+    end
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
@@ -71,6 +82,6 @@ end
 
 tree = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
 tree.insert(2)
-puts tree.pretty_print
 tree.delete(2)
 puts tree.pretty_print
+puts "The node with value 1 is #{tree.find(1)}"
