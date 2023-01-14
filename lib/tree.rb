@@ -134,6 +134,15 @@ class Tree
     array unless block_given?
   end
 
+  # Accepts a node and returns its height
+  def height(root = @root)
+    return -1 if root.nil?
+
+    left_height = height(root.left)
+    right_height = height(root.right)
+    [left_height, right_height].max + 1
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
@@ -150,3 +159,4 @@ p tree.level_order
 p tree.inorder
 p tree.preorder
 p tree.postorder
+puts "Height: #{tree.height}"
