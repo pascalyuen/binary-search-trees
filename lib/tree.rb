@@ -74,9 +74,10 @@ class Tree
   end
 
   def level_order
+    return if @root.nil?
+
     queue = [@root]
     output = []
-    return if @root.nil?
 
     until queue.empty?
       current_node = queue.shift
@@ -91,6 +92,48 @@ class Tree
   output unless block_given?
   end
 
+  # LDR
+  def inorder(root = @root, array = [], &block)
+    return if root.nil?
+
+    inorder(root.left, array, &block)
+    if block_given?
+      yield root
+    else
+      array << root.data
+    end
+    inorder(root.right, array, &block)
+    array unless block_given?
+  end
+
+  # DLR
+  def preorder(root = @root, array = [], &block)
+    return if root.nil?
+
+    if block_given?
+      yield root
+    else
+      array << root.data
+    end
+    preorder(root.left, array, &block)
+    preorder(root.right, array, &block)
+    array unless block_given?
+  end
+
+  # LRD
+  def postorder(root = @root, array = [], &block)
+    return if root.nil?
+
+    postorder(root.left, array, &block)
+    postorder(root.right, array, &block)
+    if block_given?
+      yield root
+    else
+      array << root.data
+    end
+    array unless block_given?
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
@@ -103,5 +146,7 @@ tree.insert(2)
 tree.delete(2)
 puts tree.pretty_print
 puts "The node with value 1 is #{tree.find(1)}"
-# tree.level_order {|e| puts e}
 p tree.level_order
+p tree.inorder
+p tree.preorder
+p tree.postorder
