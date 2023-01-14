@@ -143,6 +143,19 @@ class Tree
     [left_height, right_height].max + 1
   end
 
+  def depth(target_root = @root, root = @root, edges = 0)
+    return 0 if root.nil? || root == target_root
+
+    if target_root.data < root.data
+      edges += 1
+      depth(target_root, root.left, edges)
+    elsif target_root.data > root.data
+      edges += 1
+      depth(target_root, root.right, edges)
+    end
+    depth
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
@@ -154,9 +167,10 @@ tree = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
 tree.insert(2)
 tree.delete(2)
 puts tree.pretty_print
-puts "The node with value 1 is #{tree.find(1)}"
+puts "The node with value 3 is #{tree.find(3)}"
 p tree.level_order
 p tree.inorder
 p tree.preorder
 p tree.postorder
 puts "Height: #{tree.height}"
+puts "Depth: #{tree.depth}"
