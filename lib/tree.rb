@@ -144,7 +144,8 @@ class Tree
   end
 
   def depth(target_root = @root, root = @root, edges = 0)
-    return 0 if root.nil? || root == target_root
+    return 0 if root == target_root
+    return -1 if root.nil?
 
     if target_root.data < root.data
       edges += 1
@@ -154,6 +155,19 @@ class Tree
       depth(target_root, root.right, edges)
     end
     depth
+  end
+
+  # Checks if the tree is balanced
+  def balanced?(root = @root)
+    return true if root.nil?
+
+    left_height = height(root.left)
+    right_height = height(root.right)
+    if (left_height - right_height).abs <= 1 && balanced?(root.left) && balanced?(root.right)
+      true
+    else
+      false
+    end
   end
 
   def pretty_print(node = @root, prefix = '', is_left = true)
@@ -174,3 +188,4 @@ p tree.preorder
 p tree.postorder
 puts "Height: #{tree.height}"
 puts "Depth: #{tree.depth}"
+puts "Balanced?: #{tree.balanced?}"
