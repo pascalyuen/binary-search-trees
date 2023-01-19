@@ -170,6 +170,11 @@ class Tree
     end
   end
 
+  def rebalance(root = @root)
+    array = self.inorder(root)
+    Tree.new(array)
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
@@ -180,7 +185,7 @@ end
 tree = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
 tree.insert(2)
 tree.delete(2)
-puts tree.pretty_print
+# puts tree.pretty_print
 puts "The node with value 3 is #{tree.find(3)}"
 p tree.level_order
 p tree.inorder
@@ -189,3 +194,9 @@ p tree.postorder
 puts "Height: #{tree.height}"
 puts "Depth: #{tree.depth}"
 puts "Balanced?: #{tree.balanced?}"
+tree.insert(150)
+tree.insert(200)
+tree.insert(250)
+puts tree.pretty_print
+new_tree = tree.rebalance
+puts new_tree.pretty_print
